@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Welcome</title>
+
+    <link rel="stylesheet" type="text/css" href="css/libs/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/libs/angular.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <a href="https://github.com/socketstream/socketstream">
+        <img src="/images/logo.png" alt="SocketStream Logo" width="160" height="160">
+      </a>
+      <h1>Welcome to your new realtime app!</h1>
+
+      <!-- QUICK CHAT DEMO-->
+      <form id="demo" ng-controller="MessageCtrl">
+        <h3>Quick Chat Demo</h3>
+        <h5>Open this page in multiple tabs or browsers and type a message below</h5>
+        <div id="chatlog" ng-repeat="message in messages">
+          <p>
+            <span class="time">{{message.time}}</span>
+            <span class="message">{{message.message}}</span>
+          </p>
+        </div>
+        <input id="myMessage" type="text" autocomplete="off">
+      </form>
+    </div>
+  </body>
+</html>
