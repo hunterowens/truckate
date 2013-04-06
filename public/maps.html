@@ -15,7 +15,7 @@
 		<script type="text/javascript" charset="UTF-8" src="http://api.maps.nokia.com/2.2.4/jsl.js?with=all"></script>
 		<!-- JavaScript for example container (NoteContainer & Logger)  -->
 		<script type="text/javascript" charset="UTF-8" src="http://developer.here.com/apiexplorer/examples/templates/js/exampleHelpers.js"></script>
-		<script type="text/javascript" src="./js/maps.js"></script>
+		<script type="text/javascript" src="js/maps.js"></script>
 		<style type="text/css">
 			html {
 				overflow:hidden;
@@ -40,7 +40,40 @@
 		</style>
 	</head>
 	<body>
+		<h1>Test</h1>
 		<div id="mapContainer"></div>
 		<div id="uiContainer"></div>
+		<script type="text/javascript" id="exampleJsSource">
+/*	Set authentication token and appid 
+*	WARNING: this is a demo-only key
+*	please register on http://api.developer.nokia.com/ 
+*	and obtain your own developer's API key 
+*/
+nokia.Settings.set("appId", "_peU-uCkp-j8ovkzFGNU"); 
+nokia.Settings.set("authenticationToken", "gBoUkAMoxoqIWfxWA5DuMQ");
+
+// Get the DOM node to which we will append the map
+var mapContainer = document.getElementById("mapContainer");
+// Create a map inside the map container DOM node
+var map = new nokia.maps.map.Display(mapContainer, {
+	// initial center and zoom level of the map
+	center: [52.51, 13.4],
+	zoomLevel: 10
+});
+
+/* We create a UI notecontainer for example description
+ * NoteContainer is a UI helper function and not part of the Nokia Maps API
+ * See exampleHelpers.js for implementation details 
+ */
+ var noteContainer = new NoteContainer({
+	id: "basicMapUi",
+	parent: document.getElementById("uiContainer"),
+	title: "Basic map example",
+	content:
+		'<p>This example shows how to create a basic map with few lines of code</p>'
+});
+
+
+		</script>
 	</body>
 </html>
