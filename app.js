@@ -25,7 +25,7 @@ io.set('authorization', function (data, accept) {
   if (data.headers.cookie) {
     // these properties are needed for Session
     parseCookie(data, null, function (err) {
-      data.sessionID = data.cookies['express.sid'];
+      data.sessionID = data.signedCookies['express.sid'];
       data.sessionStore = sessionStore;
 
       sessionStore.get(data.sessionID, function (err, session) {
@@ -54,7 +54,7 @@ io.sockets.on('connection', function (socket) {
     });
     socket.on('sendMessage', function (message) {
       var hs = socket.handshake;
-      console.log(message);
+      console.log(hs);
       io.sockets.in(hs.room).emit('newMessage', {
         from: hs.sessionID,
         message: message,

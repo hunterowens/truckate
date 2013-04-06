@@ -24,6 +24,7 @@
         <h5>Open this page in multiple tabs or browsers and type a message below</h5>
         <div id="chatlog" ng-repeat="message in messages">
           <p>
+            <span class="from">{{message.from}}</span>
             <span class="time">{{message.time | date}}</span>
             <span class="message">{{message.message}}</span>
           </p>
