@@ -19,16 +19,16 @@
       <h1>Welcome to your new realtime app!</h1>
 
       <!-- QUICK CHAT DEMO-->
-      <form id="demo" ng-controller="MessageCtrl">
+      <form id="demo" ng-submit="publish()" ng-controller="MessageCtrl">
         <h3>Quick Chat Demo</h3>
         <h5>Open this page in multiple tabs or browsers and type a message below</h5>
         <div id="chatlog" ng-repeat="message in messages">
           <p>
-            <span class="time">{{message.time}}</span>
+            <span class="time">{{message.time | date}}</span>
             <span class="message">{{message.message}}</span>
           </p>
         </div>
-        <input id="myMessage" type="text" autocomplete="off">
+        <input id="myMessage" type="text" autocomplete="off" ng-model="draft">
       </form>
     </div>
   </body>

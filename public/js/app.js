@@ -1,8 +1,9 @@
 'use strict';
 
+var socket = io.connect("http://localhost:3000");
 angular.module("demo.services", [])
   .factory("socket", function ($rootScope) {
-    var socket = io.connect();
+    console.log(socket);
     return {
       on: function (eventName, callback) {
         socket.on(eventName, function () {
@@ -13,8 +14,11 @@ angular.module("demo.services", [])
         });
       },
       emit: function (eventName, data, callback) {
+        console.log(eventName, data);
         socket.emit(eventName, data, function () {
           var args = arguments;
+          console.log(args);
+          console.log("hello?");
           $rootScope.$apply(function () {
             if (callback) {
               callback.apply(socket, args);
@@ -23,30 +27,23 @@ angular.module("demo.services", [])
         })
       }
     };
-  })
-  .factory("messageService", function ($rootScope, socket) {
-    socket.on("newMessage", function(message) {
-      $rootScope.$broadcast("demo.messageReceived", message);
-    });
-    var send = function(text, cb) {
-      return socket.emit("sendMessage", text, cb);
-    };
-    return { send: send };
   });
 
 
 angular.module("demo", ["demo.services"]);
 
-function MessageCtrl($scope, messageService) {
+function MessageCtrl($scope, socket) {
   $scope.messages = [];
   $scope.draft = "";
   $scope.error = "";
-  $scope.$on("messageReceived", function (ev, message) {
-    messages.push(message);
+  socket.on("newMessage", function (message) {
+    $scope.messages.push(message);
   });
   $scope.publish = function () {
+    console.log("test");
     $scope.success = false;
-    messageService.send(draft, function (success) {
+    socket.emit("sendMessage", $scope.draft, function (success) {
+      console.log(success);
       if (success) {
         $scope.draft = "";
       } else {
@@ -55,5 +52,5 @@ function MessageCtrl($scope, messageService) {
     });
   }
 }
-MessageCtrl.$inject = ["$scope", "messageService"];
+MessageCtrl.$inject = ["$scope", "socket"];
 
