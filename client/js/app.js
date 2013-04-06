@@ -42,7 +42,7 @@ function ChatCtrl($scope, socket) {
       $scope.room = room;
     }
   });
-  socket.on('changeNick', function (room) {
+  socket.on('changedNick', function (nick) {
     if ($scope.nick != nick) {
       $scope.nick = nick;
     }
