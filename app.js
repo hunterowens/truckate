@@ -46,33 +46,41 @@ io.set('authorization', function (data, accept) {
 LOBBY_ROOM = 'lobby';
 
 io.sockets.on('connection', function (socket) {
-  joinRoom(socket, LOBBY_ROOM, function () {
-    socket.emit('newMessage', {
-      from: 'server',
-      message: 'Welcome!',
+  var hs = socket.handshake;
+  joinRoom(socket, LOBBY_ROOM);
+  changeNick(socket, hs.sessionID);
+  socket.emit('newMessage', {
+    from: 'server',
+    message: 'Welcome!',
+    time: (new Date().getTime())
+  });
+  socket.on('sendMessage', function (message) {
+    console.log(hs);
+    io.sockets.in(hs.session.room).emit('newMessage', {
+      from: hs.session.nick,
+      message: message,
       time: (new Date().getTime())
     });
-    socket.on('sendMessage', function (message) {
-      var hs = socket.handshake;
-      console.log(hs);
-      io.sockets.in(hs.session.room).emit('newMessage', {
-        from: hs.sessionID,
-        message: message,
-        time: (new Date().getTime())
-      });
-    });
-    socket.on('joinRoom', function (room) {
-      joinRoom(socket, room);
-    });
+  });
+  socket.on('joinRoom', function (room) {
+    joinRoom(socket, room);
+  });
+  socket.on('changeNick', function (nick) {
+    changeNick(socket, nick);
   });
 });
+
+var changeNick = function(socket, nick, cb) {
+  var hs = socket.handshake;
+  hs.session.nick = nick;
+  socket.emit('changedNick', nick);
+}
 
 var joinRoom = function (socket, room, cb) {
   var hs = socket.handshake;
   socket.join(room);
   socket.leave(hs.session.room);
   hs.session.room = room;
-  hs.session.save();
   console.log("somebody joined room", room);
   socket.emit('joinedRoom', room);
   if (cb) {

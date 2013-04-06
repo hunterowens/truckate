@@ -38,9 +38,13 @@ function ChatCtrl($scope, socket) {
     $scope.messages.push(message);
   });
   socket.on('joinedRoom', function (room) {
-    console.log("joined room", room);
     if ($scope.room != room) {
       $scope.room = room;
+    }
+  });
+  socket.on('changeNick', function (room) {
+    if ($scope.nick != nick) {
+      $scope.nick = nick;
     }
   });
   $scope.joinRoom = function () {
