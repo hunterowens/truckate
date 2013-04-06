@@ -12,25 +12,33 @@
     <script src="js/app.js"></script>
   </head>
   <body>
-    <div id="content">
-      <a href="https://github.com/socketstream/socketstream">
-        <img src="/images/logo.png" alt="SocketStream Logo" width="160" height="160">
-      </a>
+    <header class="row">
       <h1>Welcome to your new realtime app!</h1>
+      <h5>Open this page in multiple tabs or browsers and type a message below</h5>
+    </header>
 
-      <!-- QUICK CHAT DEMO-->
-      <form id="demo" ng-submit="publish()" ng-controller="MessageCtrl">
-        <h3>Quick Chat Demo</h3>
-        <h5>Open this page in multiple tabs or browsers and type a message below</h5>
-        <div id="chatlog" ng-repeat="message in messages">
-          <p>
-            <span class="from">{{message.from}}</span>
-            <span class="time">{{message.time | date}}</span>
-            <span class="message">{{message.message}}</span>
-          </p>
+    <div class="row" ng-controller="ChatCtrl">
+      <form id="demo" ng-submit="publish()" class="large-9 columns">
+        <div id="chatlog" ng-repeat="message in messages" class="row">
+          <div>
+            <span class="from small-4 columns">{{message.from}}</span>
+            <span class="message small-3 columns">{{message.message}}</span>
+            <span class="time small-1 columns">{{message.time | date}}</span>
+          </div>
         </div>
-        <input id="myMessage" type="text" autocomplete="off" ng-model="draft">
+        <div class="row">
+          <input id="myMessage" class="12-large columns" type="text" autocomplete="off" ng-model="draft" />
+        </div>
       </form>
+      <div class="large-3 columns">
+        <h3>Sidebar!</h3>
+        <form ng-submit="changeNick()">
+          <input class="3-large columns" type="text" ng-model="nick" />
+        </form>
+        <form ng-submit="joinRoom()">
+          <input class="3-large columns" type="text" ng-model="room" />
+        </form>
+      </div>
     </div>
   </body>
 </html>

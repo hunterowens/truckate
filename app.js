@@ -55,23 +55,29 @@ io.sockets.on('connection', function (socket) {
     socket.on('sendMessage', function (message) {
       var hs = socket.handshake;
       console.log(hs);
-      io.sockets.in(hs.room).emit('newMessage', {
+      io.sockets.in(hs.session.room).emit('newMessage', {
         from: hs.sessionID,
         message: message,
         time: (new Date().getTime())
       });
+    });
+    socket.on('joinRoom', function (room) {
+      joinRoom(socket, room);
     });
   });
 });
 
 var joinRoom = function (socket, room, cb) {
   var hs = socket.handshake;
-  socket.join(room, function () {
-    hs.session.room = room;
-    if (cb) {
-      cb(socket, room);
-    }
-  });
+  socket.join(room);
+  socket.leave(hs.session.room);
+  hs.session.room = room;
+  hs.session.save();
+  console.log("somebody joined room", room);
+  socket.emit('joinedRoom', room);
+  if (cb) {
+    cb(socket, room);
+  }
 }
 
 var leaveRoom = function (socket, room, cb) {
