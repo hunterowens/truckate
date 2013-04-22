@@ -11,11 +11,16 @@
     <script src="js/libs/angular.js"></script>
     <script src="js/app.js"></script>
   </head>
+  
   <body>
     <header class="row">
       <h1>Welcome to your new realtime app!</h1>
       <h5>Open this page in multiple tabs or browsers and type a message below</h5>
     </header>
+
+    <div class="row" ng-controller="test">
+      <input class="small-4 columns" type="text" ng-model="hello" />
+    </div>
 
     <div class="row" ng-controller="ChatCtrl">
       <form id="demo" ng-submit="publish()" class="large-9 columns">

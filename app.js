@@ -47,26 +47,29 @@ LOBBY_ROOM = 'lobby';
 
 io.sockets.on('connection', function (socket) {
   var hs = socket.handshake;
-  joinRoom(socket, LOBBY_ROOM);
-  changeNick(socket, hs.sessionID);
-  socket.emit('newMessage', {
-    from: 'server',
-    message: 'Welcome!',
-    time: (new Date().getTime())
-  });
-  socket.on('sendMessage', function (message) {
-    console.log(hs);
-    io.sockets.in(hs.session.room).emit('newMessage', {
-      from: hs.session.nick,
-      message: message,
-      time: (new Date().getTime())
-    });
-  });
-  socket.on('joinRoom', function (room) {
-    joinRoom(socket, room);
-  });
-  socket.on('changeNick', function (nick) {
-    changeNick(socket, nick);
+  // joinRoom(socket, LOBBY_ROOM);
+  // changeNick(socket, hs.sessionID);
+  // socket.emit('newMessage', {
+  //   from: 'server',
+  //   message: 'Welcome!',
+  //   time: (new Date().getTime())
+  // });
+  // socket.on('sendMessage', function (message) {
+  //   console.log(hs);
+  //   io.sockets.in(hs.session.room).emit('newMessage', {
+  //     from: hs.session.nick,
+  //     message: message,
+  //     time: (new Date().getTime())
+  //   });
+  // });
+  // socket.on('joinRoom', function (room) {
+  //   joinRoom(socket, room);
+  // });
+  // socket.on('changeNick', function (nick) {
+  //   changeNick(socket, nick);
+  // });
+  socket.on('opSumbit', function() {
+    console.log('it works');
   });
 });
 
@@ -97,4 +100,3 @@ var leaveRoom = function (socket, room, cb) {
 
 server.listen(3000);
 console.log('Listening on port 3000');
-
