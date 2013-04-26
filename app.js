@@ -7,7 +7,9 @@ var express = require('express'),
     parseCookie = require('connect').cookieParser(SECRET),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server);
+    io = require('socket.io').listen(server)
+    operator = require('./server/operator');
+
 
 app.configure(function () {
   app.use(express.cookieParser());
@@ -43,60 +45,7 @@ io.set('authorization', function (data, accept) {
   }
 });
 
-LOBBY_ROOM = 'lobby';
-
-io.sockets.on('connection', function (socket) {
-  var hs = socket.handshake;
-  // joinRoom(socket, LOBBY_ROOM);
-  // changeNick(socket, hs.sessionID);
-  // socket.emit('newMessage', {
-  //   from: 'server',
-  //   message: 'Welcome!',
-  //   time: (new Date().getTime())
-  // });
-  // socket.on('sendMessage', function (message) {
-  //   console.log(hs);
-  //   io.sockets.in(hs.session.room).emit('newMessage', {
-  //     from: hs.session.nick,
-  //     message: message,
-  //     time: (new Date().getTime())
-  //   });
-  // });
-  // socket.on('joinRoom', function (room) {
-  //   joinRoom(socket, room);
-  // });
-  // socket.on('changeNick', function (nick) {
-  //   changeNick(socket, nick);
-  // });
-  socket.on('opSumbit', function() {
-    console.log('it works');
-  });
-});
-
-var changeNick = function(socket, nick, cb) {
-  var hs = socket.handshake;
-  hs.session.nick = nick;
-  socket.emit('changedNick', nick);
-}
-
-var joinRoom = function (socket, room, cb) {
-  var hs = socket.handshake;
-  socket.join(room);
-  socket.leave(hs.session.room);
-  hs.session.room = room;
-  console.log("somebody joined room", room);
-  socket.emit('joinedRoom', room);
-  if (cb) {
-    cb(socket, room);
-  }
-}
-
-var leaveRoom = function (socket, room, cb) {
-  var hs = socket.handshake;
-  socket.leave(room, function () {
-    joinRoom(socket, LOBBY_ROOM);
-  });
-}
+operator.init(io);
 
 server.listen(3000);
 console.log('Listening on port 3000');

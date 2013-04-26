@@ -1,7 +1,7 @@
 'use strict';
 
 var socket = io.connect();
-angular.module('demo.services', [])
+angular.module('truckate.services', [])
 	.factory('socket', function ($rootScope) {
 		return {
 			on: function (eventName, callback) {
@@ -25,23 +25,5 @@ angular.module('demo.services', [])
 		};
 	});
 
-angular.module('demo', ['demo.services']);
+angular.module('truckate', ['truckate.services']);
 
-function opController($scope, socket) {
-	$scope.entryDesc = "";
-
-	$scope.updateLocation = function() {};
-
-	$scope.submit = function() {
-		if (!$scope.entryName) {
-			alert("Your entry needs a name!");
-		} else if (!$scope.entryPrice) {
-			alert("Your entry needs a price!");
-		} else {
-			alert("it worked?");
-			socket.emit('opSubmit', {});
-			alert("it worked!");
-		}
-	};
-}
-opController.$inject = ['$scope', 'socket'];
