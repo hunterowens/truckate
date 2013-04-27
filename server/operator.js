@@ -1,3 +1,5 @@
+var mongoskin = require('mongoskin');
+
 exports.init = function (io, db) {
 
   // TODO: actually secure login
@@ -16,9 +18,7 @@ exports.init = function (io, db) {
           } else {
             hs.session.user_id = user._id;
             hs.session.authenticated = true;
-            console.log('going to send operator:loggedIn', user);
             socket.emit('operator:loggedIn', user);
-            initMenuEditor(socket, hs);
           }
       });
     });
@@ -27,16 +27,25 @@ exports.init = function (io, db) {
   // TODO: automate hs.session.authenticated checks
   var initMenuEditor = function (socket, hs) {
     socket.on('operator:addEntry', function(msg) {
-      if (!hs.session.authenticated) {
-        socket.emit('operator:notLoggedIn', {error: "Please log in."});
-      }
-      console.log('operator:newEntry', msg);
+      console.log('operator:addEntry', msg);
+      db.collection('menus').updateById(msg.menu_id, {$push: {entries: msg.entry}});
     });
-    socket.on('operator:getMenu', function(msg) {
-      if (!hs.session.authenticated) {
-        socket.emit('operator:notLoggedIn', {error: "Please log in."});
+    socket.on('operator:listMenus', function(msg) {
+      console.log('operator:listMenus', msg);
+      if (!msg.truck_id) {
+        socket.emit('operator:requestError');
+        return;
+      } else {
+        db.collection('trucks').findById(msg.truck_id, function (err, truck) {
+          if (err) {
+            socket.emit('operator:requestError');
+          } else {
+            db.collection('menus').find({_id: {$in: truck.menus}}).toArray(function (err, menus) {
+              socket.emit('operator:menuList', {menus: menus});
+            });
+          }
+        });
       }
-      console.log('operator:getMenu', msg);
     });
   };
 
@@ -45,6 +54,7 @@ exports.init = function (io, db) {
   io.sockets.on('connection', function (socket) {
     var hs = socket.handshake;
     initLogin(socket, hs);
+    initMenuEditor(socket, hs);
   });
 
 }

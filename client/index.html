@@ -40,8 +40,9 @@
           <div class="row" unimplemented-ng-controller="TruckSelectionController">
             Select your truck...
           </div>
-          <div class="row" unimplemented-ng-controller="MenuSelectionController">
+          <div class="row" ng-controller="MenuSelectionController">
             Edit a menu:
+            <select ng-model="menu" ng-options="menu.name for menu in menus"></select>
           </div>
         </div>
         <div class="large-9 columns" ng-controller="MenuEditorController">
