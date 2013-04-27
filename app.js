@@ -7,9 +7,13 @@ var express = require('express'),
     parseCookie = require('connect').cookieParser(SECRET),
     app = express(),
     server = require('http').createServer(app),
-    io = require('socket.io').listen(server)
-    operator = require('./server/operator');
-
+    io = require('socket.io').listen(server),
+    operator = require('./server/operator'),
+    mongodb = require('mongodb'),
+    Db = mongodb.Db,
+    Connection = mongodb.Connection,
+    Server = mongodb.Server,
+    util = require('util');
 
 app.configure(function () {
   app.use(express.cookieParser());
@@ -45,7 +49,16 @@ io.set('authorization', function (data, accept) {
   }
 });
 
-operator.init(io);
+var host = process.env['MONGO_NODE_DRIVER_HOST'] != null ? process.env['MONGO_NODE_DRIVER_HOST'] : 'localhost';
+var port = process.env['MONGO_NODE_DRIVER_PORT'] != null ? process.env['MONGO_NODE_DRIVER_PORT'] : Connection.DEFAULT_PORT;
+var env = process.env['ENV'] != null ? process.env['ENV'] : 'development';
+Db.connect(util.format("mongodb://%s:%s/truckate_%s", host, port, env), function (err, db) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+  operator.init(io, db);
+});
 
 server.listen(3000);
 console.log('Listening on port 3000');

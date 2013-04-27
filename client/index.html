@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/libs/foundation.css" />
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/common/libs/sha.js"></script>
     <script src="/common/libs/angular.js"></script>
     <script src="/common/truckate.js"></script>
     <script src="/operator/operator.js"></script>
@@ -18,14 +19,21 @@
       <h5>Open this page in multiple tabs or browsers and type a message below</h5>
     </header>
 
-    <div class="row" ng-controller="OperatorController">
-      <form ng-submit="submit()" class="large-12 columns">
-        <div class="row">
+    <div class="row">
+      <div class="large-3 columns">
+        <form name="loginForm" ng-submit="submit()" class="row" ng-controller="LoginController">
+          <input class="row" type="text" ng-model="username" required />
+          <input class="row" type="password" ng-model="password" required />
+          <input class="small button row" type="submit" />
+        </form>
+      </div>
+      <div class="large-9 columns" ng-controller="MenuEditorController">
+        <form ng-submit="submit()" class="row">
           <input class="small-8 columns" type="text" autocomplete="off" ng-model="entryName" />
           <input class="small-3 columns" type="text" autocomplete="off" ng-model="entryPrice" />
           <input class="small button small-1 columns" type="submit" />
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </body>
 </html>
