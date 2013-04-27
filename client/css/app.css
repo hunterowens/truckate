@@ -49,3 +49,7 @@
   font-style: italic;
   font-weight: bold;
 }
+
+div {
+  padding: 10px;
+}

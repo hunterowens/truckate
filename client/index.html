@@ -5,6 +5,7 @@
     <title>Welcome</title>
 
     <link rel="stylesheet" type="text/css" href="/css/libs/foundation.css" />
+    <link rel="stylesheet" type="text/css" href="/css/libs/app.css" />
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/common/libs/sha.js"></script>
@@ -38,7 +39,7 @@
       <div class="row" ng-switch-when="true">
         <div class="large-3 columns">
           <div class="row" unimplemented-ng-controller="TruckSelectionController">
-            Select your truck...
+            <strong>Select your truck...</strong>
           </div>
           <div class="row" ng-controller="MenuSelectionController">
             Edit a menu:
@@ -47,8 +48,8 @@
         </div>
         <div class="large-9 columns" ng-controller="MenuEditorController">
           <div class="row">
-            <div class="small-8 columns">Entry Name</div>
-            <div class="small-4 columns">Entry Price</div>
+            <div class="small-8 columns"><strong>Entry Name</strong></div>
+            <div class="small-4 columns"><strong>Entry Price</strong></div>
           </div>
           <div class="row" unimplemented-ng-repeat="entry in entries">
             <span class="small-8 columns" ng-model="entry.name" contenteditable required></span>
