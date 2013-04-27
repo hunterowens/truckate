@@ -25,6 +25,7 @@ angular.module('truckate.operator', ['truckate.commonServices'])
       console.log('operator:loggedIn', msg);
       svc.authenticated = true;
       svc.user = msg;
+      $rootScope.$broadcast('operator:loggedIn', msg);
     });
     socket.on('operator:loginFailed', function (msg) {
       console.log('operator:loginFailed', msg);
@@ -58,7 +59,7 @@ angular.module('truckate.operator', ['truckate.commonServices'])
       $scope.entryPrice = "";
       $scope.entryAvailable = true;
 
-      $scope.on('operator:menuSelected', function (menu) {
+      $scope.$on('operator:menuSelected', function (menu) {
         $scope.menu = menu;
       });
 
