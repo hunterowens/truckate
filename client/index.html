@@ -15,24 +15,51 @@
 
   <body>
     <header class="row">
-      <h1>Welcome to your new realtime app!</h1>
-      <h5>Open this page in multiple tabs or browsers and type a message below</h5>
+      <h1>Truckate</h1>
     </header>
 
-    <div class="row">
-      <div class="large-3 columns">
-        <form name="loginForm" ng-submit="submit()" class="row" ng-controller="LoginController">
-          <input class="row" type="text" ng-model="username" required />
-          <input class="row" type="password" ng-model="password" required />
-          <input class="small button row" type="submit" />
-        </form>
+    <div ng-controller="OperatorController" ng-switch on="authenticated">
+      <div class="row" ng-switch-when="false">
+        <div class="large-4 small-centered columns">
+          <p>Please log in.</p>
+          <form name="loginForm" ng-submit="submit()" class="row" ng-controller="LoginController">
+            <div class="row">
+              <label class="small-5 columns" for="username">username</label>
+              <input class="small-7 columns" type="text" name="username" ng-model="username" required />
+            </div>
+            <div class="row">
+              <label class="small-5 columns" for="password">password</label>
+              <input class="small-7 columns" type="password" name="password" ng-model="password" required />
+            </div>
+            <input class="small right button row" type="submit" />
+          </form>
+        </div>
       </div>
-      <div class="large-9 columns" ng-controller="MenuEditorController">
-        <form ng-submit="submit()" class="row">
-          <input class="small-8 columns" type="text" autocomplete="off" ng-model="entryName" />
-          <input class="small-3 columns" type="text" autocomplete="off" ng-model="entryPrice" />
-          <input class="small button small-1 columns" type="submit" />
-        </form>
+      <div class="row" ng-switch-when="true">
+        <div class="large-3 columns">
+          <div class="row" unimplemented-ng-controller="TruckSelectionController">
+            Select your truck...
+          </div>
+          <div class="row" unimplemented-ng-controller="MenuSelectionController">
+            Edit a menu:
+          </div>
+        </div>
+        <div class="large-9 columns" ng-controller="MenuEditorController">
+          <div class="row">
+            <div class="small-8 columns">Entry Name</div>
+            <div class="small-4 columns">Entry Price</div>
+          </div>
+          <div class="row" unimplemented-ng-repeat="entry in entries">
+            <span class="small-8 columns" ng-model="entry.name" contenteditable required></span>
+            <span class="small-2 columns" ng-model="entry.price" contenteditable required></span>
+            <input class="small-2 columns" type="checkbox" ng-model="entry.available"></span>
+          </div>
+          <form class="row" ng-submit="submit()">
+            <input class="small-8 columns" type="text" autocomplete="off" ng-model="entryName" />
+            <input class="small-2 columns" type="text" autocomplete="off" ng-model="entryPrice" />
+            <input class="small button small-2 columns" type="submit" />
+          </form>
+        </div>
       </div>
     </div>
   </body>

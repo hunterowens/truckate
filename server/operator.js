@@ -1,40 +1,41 @@
-var mongodb = require('mongodb');
-
 exports.init = function (io, db) {
 
   // TODO: actually secure login
   var initLogin = function (socket, hs) {
     socket.on('operator:login', function(msg) {
-      console.log(msg);
       if (!msg.username || !msg.password_hash) {
         socket.emit('operator:loginFailed', {error: "Need a username and password."});
         return;
       }
-      db.collection('users', function (err, users) {
-        users.findOne({
-            username: msg.username,
-            password_hash: msg.password_hash
-          },
-          function (err, user) {
-            console.log(err)
-            if (err) {
-              socket.emit('operator:loginFailed', {error: "Username or password wrong."});
-            } else {
-              hs.user_id = user._id;
-              hs.username = user.username;
-              hs.truck_id = user.truck_id;
-              hs.authenticated = true;
-            }
-        });
+      db.collection('users').findOne({
+          username: msg.username,
+          password_hash: msg.password_hash
+        }, function (err, user) {
+          if (!user) {
+            socket.emit('operator:loginFailed', {error: "Username or password incorrect."});
+          } else {
+            hs.session.user_id = user._id;
+            hs.session.authenticated = true;
+            console.log('going to send operator:loggedIn', user);
+            socket.emit('operator:loggedIn', user);
+            initMenuEditor(socket, hs);
+          }
       });
     });
   }
 
+  // TODO: automate hs.session.authenticated checks
   var initMenuEditor = function (socket, hs) {
-    socket.on('operator:newEntry', function(msg) {
+    socket.on('operator:addEntry', function(msg) {
+      if (!hs.session.authenticated) {
+        socket.emit('operator:notLoggedIn', {error: "Please log in."});
+      }
       console.log('operator:newEntry', msg);
     });
     socket.on('operator:getMenu', function(msg) {
+      if (!hs.session.authenticated) {
+        socket.emit('operator:notLoggedIn', {error: "Please log in."});
+      }
       console.log('operator:getMenu', msg);
     });
   };

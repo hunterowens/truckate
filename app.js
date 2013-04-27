@@ -9,10 +9,7 @@ var express = require('express'),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
     operator = require('./server/operator'),
-    mongodb = require('mongodb'),
-    Db = mongodb.Db,
-    Connection = mongodb.Connection,
-    Server = mongodb.Server,
+    mongoskin = require('mongoskin'),
     util = require('util');
 
 app.configure(function () {
@@ -50,15 +47,9 @@ io.set('authorization', function (data, accept) {
 });
 
 var host = process.env['MONGO_NODE_DRIVER_HOST'] != null ? process.env['MONGO_NODE_DRIVER_HOST'] : 'localhost';
-var port = process.env['MONGO_NODE_DRIVER_PORT'] != null ? process.env['MONGO_NODE_DRIVER_PORT'] : Connection.DEFAULT_PORT;
+var port = process.env['MONGO_NODE_DRIVER_PORT'] != null ? process.env['MONGO_NODE_DRIVER_PORT'] : '27017';
 var env = process.env['ENV'] != null ? process.env['ENV'] : 'development';
-Db.connect(util.format("mongodb://%s:%s/truckate_%s", host, port, env), function (err, db) {
-  if (err) {
-    console.log(err);
-    process.exit(1);
-  }
-  operator.init(io, db);
-});
+operator.init(io, mongoskin.db(util.format("%s:%s/truckate_%s?auto_reconnect", host, port, env), {safe: true}));
 
 server.listen(3000);
 console.log('Listening on port 3000');
