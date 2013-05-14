@@ -3,7 +3,9 @@
 Stuff Stuff Stuff Stuff
 
 To Test Stripe, 
+<pre>
 <code>
 	$cd node_modules/vows
 	$STRIPE_API=sk_test_ZHHduccY1HPO7PrFwuCFcpVN vows test/*
 </code>
+</pre>
