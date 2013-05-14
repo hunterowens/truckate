@@ -1,0 +1,17 @@
+{
+  "name": "truckate",
+  "description": "An awesome real time application",
+  "version": "0.0.1",
+  "author": "Truckate <truckate@truckate.com>",
+  "private": true,
+  "engines": { "node": ">= 0.6.0" },
+  "dependencies": {
+    "express": "3.x",
+    "connect": "2.7.x",
+    "socket.io": "0.9.x",
+    "mongoskin": "0.5.x"
+  },
+  "scripts":{
+    "start":"node app.js"
+  }
+}
